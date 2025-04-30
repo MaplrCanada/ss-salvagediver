@@ -42,12 +42,12 @@ $(function() {
     // Close UI button
     $('#close-ui').click(function() {
         $('#salvage-ui').fadeOut(300);
-        $.post('https://qb-salvage/closeUI', JSON.stringify({}));
+        $.post('https://ss-salvagediver/closeUI', JSON.stringify({}));
     });
     
     // Return items button
     $('#return-items').click(function() {
-        $.post('https://qb-salvage/returnItems', JSON.stringify({}));
+        $.post('https://ss-salvagediver/returnItems', JSON.stringify({}));
     });
     
     // Minigame start button
@@ -59,7 +59,7 @@ $(function() {
     // Minigame cancel button
     $('#minigame-cancel').click(function() {
         $('#minigame-container').addClass('hidden');
-        $.post('https://qb-salvage/cancelMinigame', JSON.stringify({}));
+        $.post('https://ss-salvagediver/cancelMinigame', JSON.stringify({}));
     });
     
     // Alert confirm button
@@ -305,7 +305,7 @@ function endMinigame(success) {
         $('#minigame-container').addClass('hidden');
         
         // Send result to client script
-        $.post('https://qb-salvage/minigameResult', JSON.stringify({
+        $.post('https://ss-salvagediver/minigameResult', JSON.stringify({
             success: success
         }));
     }, 1500);
@@ -315,6 +315,6 @@ function endMinigame(success) {
 $(document).keyup(function(e) {
     if (e.key === "Escape") {
         $('#salvage-ui').fadeOut(300);
-        $.post('https://qb-salvage/closeUI', JSON.stringify({}));
+        $.post('https://ss-salvagediver/closeUI', JSON.stringify({}));
     }
 });

@@ -31,7 +31,7 @@ function SavePlayerSkills(citizenId)
 end
 
 -- Get player skill level
-RegisterNetEvent('qb-salvage:server:getSkillLevel', function()
+RegisterNetEvent('ss-salvagediver:server:getSkillLevel', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     if not Player then return end
@@ -47,11 +47,11 @@ RegisterNetEvent('qb-salvage:server:getSkillLevel', function()
     end
     
     -- Send skill data to client
-    TriggerClientEvent('qb-salvage:client:updateSkillLevel', src, PlayerSkills[citizenId].xp, PlayerSkills[citizenId].level)
+    TriggerClientEvent('ss-salvagediver:client:updateSkillLevel', src, PlayerSkills[citizenId].xp, PlayerSkills[citizenId].level)
 end)
 
 -- Apply for the salvage diver job
-RegisterNetEvent('qb-salvage:server:applyForJob', function()
+RegisterNetEvent('ss-salvagediver:server:applyForJob', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     if not Player then return end
@@ -69,7 +69,7 @@ RegisterNetEvent('qb-salvage:server:applyForJob', function()
 end)
 
 -- Complete a salvage operation
-RegisterNetEvent('qb-salvage:server:completeSalvage', function(areaIndex, skillLevel)
+RegisterNetEvent('ss-salvagediver:server:completeSalvage', function(areaIndex, skillLevel)
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     if not Player then return end
@@ -109,7 +109,7 @@ RegisterNetEvent('qb-salvage:server:completeSalvage', function(areaIndex, skillL
         -- Give the item to the player
         Player.Functions.AddItem(foundItem.item, 1)
         TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[foundItem.item], "add")
-        TriggerClientEvent('qb-salvage:client:itemFound', src, foundItem.item, foundItem.label)
+        TriggerClientEvent('ss-salvagediver:client:itemFound', src, foundItem.item, foundItem.label)
         
         -- Add XP
         local xpGain = Config.RewardSystem.base_xp
@@ -135,7 +135,7 @@ RegisterNetEvent('qb-salvage:server:completeSalvage', function(areaIndex, skillL
             SavePlayerSkills(citizenId)
             
             -- Update client
-            TriggerClientEvent('qb-salvage:client:updateSkillLevel', src, PlayerSkills[citizenId].xp, PlayerSkills[citizenId].level)
+            TriggerClientEvent('ss-salvagediver:client:updateSkillLevel', src, PlayerSkills[citizenId].xp, PlayerSkills[citizenId].level)
         end
     else
         TriggerClientEvent('QBCore:Notify', src, "You couldn't find anything valuable this time.", "error")
@@ -143,7 +143,7 @@ RegisterNetEvent('qb-salvage:server:completeSalvage', function(areaIndex, skillL
 end)
 
 -- Return salvaged items for payment
-RegisterNetEvent('qb-salvage:server:returnItems', function()
+RegisterNetEvent('ss-salvagediver:server:returnItems', function()
     local src = source
     local Player = QBCore.Functions.GetPlayer(src)
     if not Player then return end
@@ -198,7 +198,7 @@ RegisterNetEvent('qb-salvage:server:returnItems', function()
     if itemsReturned then
         Player.Functions.AddMoney("cash", math.floor(totalPayment), "salvage-payment")
         TriggerClientEvent('QBCore:Notify', src, "You received $" .. math.floor(totalPayment) .. " for your salvaged items!", "success")
-        TriggerClientEvent('qb-salvage:client:completeContract', src)
+        TriggerClientEvent('ss-salvagediver:client:completeContract', src)
     else
         TriggerClientEvent('QBCore:Notify', src, "You don't have any salvaged items to return.", "error")
     end
@@ -256,11 +256,11 @@ RegisterNetEvent('onResourceStart', function(resourceName)
             for itemName, itemData in pairs(itemsToRegister) do
                 if not QBCore.Shared.Items[itemName] then
                     QBCore.Shared.Items[itemName] = itemData
-                    print("^2[qb-salvage]^7 Registered item: " .. itemName)
+                    print("^2[ss-salvagediver]^7 Registered item: " .. itemName)
                 end
             end
         else
-            print("^1[qb-salvage]^7 Could not access QBCore.Shared.Items - items not registered automatically")
+            print("^1[ss-salvagediver]^7 Could not access QBCore.Shared.Items - items not registered automatically")
         end
     end
 end)
@@ -270,6 +270,6 @@ RegisterNetEvent('onResourceStart', function(resourceName)
     if resourceName == GetCurrentResourceName() then
         -- Spawn some hidden treasures in the hidden areas
         -- This can be expanded to create more dynamic treasure spawns
-        print("^2[qb-salvage]^7 Resource started. Hidden treasures activated.")
+        print("^2[ss-salvagediver]^7 Resource started. Hidden treasures activated.")
     end
 end)

@@ -164,7 +164,7 @@ end
 
 -- Apply for the salvage diver job
 function ApplyForJob()
-    TriggerServerEvent("qb-salvage:server:applyForJob")
+    TriggerServerEvent("ss-salvagediver:server:applyForJob")
 end
 
 -- Open job menu
@@ -186,14 +186,14 @@ function OpenJobMenu()
             header = "Get Contract",
             txt = "Accept a legal salvage contract",
             params = {
-                event = "qb-salvage:client:showContracts"
+                event = "ss-salvagediver:client:showContracts"
             }
         },
         {
             header = "Return Salvaged Items",
             txt = "Cash in your salvaged items",
             params = {
-                event = "qb-salvage:client:returnItems"
+                event = "ss-salvagediver:client:returnItems"
             }
         }
     }
@@ -221,7 +221,7 @@ function OpenJobMenu()
 end
 
 -- Show available contracts
-RegisterNetEvent("qb-salvage:client:showContracts", function()
+RegisterNetEvent("ss-salvagediver:client:showContracts", function()
     local contractMenu = {
         {
             header = "Available Salvage Contracts",
@@ -234,7 +234,7 @@ RegisterNetEvent("qb-salvage:client:showContracts", function()
             header = area.name,
             txt = "Accept a salvage contract at " .. area.name,
             params = {
-                event = "qb-salvage:client:acceptContract",
+                event = "ss-salvagediver:client:acceptContract",
                 args = i
             }
         })
@@ -244,7 +244,7 @@ RegisterNetEvent("qb-salvage:client:showContracts", function()
         header = "← Go Back",
         txt = "",
         params = {
-            event = "qb-salvage:client:openJobMenu"
+            event = "ss-salvagediver:client:openJobMenu"
         }
     })
     
@@ -252,12 +252,12 @@ RegisterNetEvent("qb-salvage:client:showContracts", function()
 end)
 
 -- Open job menu (for going back)
-RegisterNetEvent("qb-salvage:client:openJobMenu", function()
+RegisterNetEvent("ss-salvagediver:client:openJobMenu", function()
     OpenJobMenu()
 end)
 
 -- Accept a salvage contract
-RegisterNetEvent("qb-salvage:client:acceptContract", function(areaIndex)
+RegisterNetEvent("ss-salvagediver:client:acceptContract", function(areaIndex)
     local area = Config.SalvageAreas[areaIndex]
     if not area then return end
     
@@ -288,8 +288,8 @@ RegisterNetEvent("qb-salvage:client:acceptContract", function(areaIndex)
 end)
 
 -- Return salvaged items for payment
-RegisterNetEvent("qb-salvage:client:returnItems", function()
-    TriggerServerEvent("qb-salvage:server:returnItems")
+RegisterNetEvent("ss-salvagediver:client:returnItems", function()
+    TriggerServerEvent("ss-salvagediver:server:returnItems")
 end)
 
 -- Start monitoring if player is in contract area
@@ -367,7 +367,7 @@ function StartSalvage(area)
         ClearPedTasksImmediately(PlayerPedId())
         
         -- Complete the salvage and give rewards
-        TriggerServerEvent("qb-salvage:server:completeSalvage", activeContract.area, playerSkill)
+        TriggerServerEvent("ss-salvagediver:server:completeSalvage", activeContract.area, playerSkill)
         
         activeSalvage = false
         Wait(5000) -- Cooldown between salvage attempts
@@ -380,11 +380,11 @@ end
 
 -- Fetch player's skill level from server
 function FetchSkillLevel()
-    TriggerServerEvent("qb-salvage:server:getSkillLevel")
+    TriggerServerEvent("ss-salvagediver:server:getSkillLevel")
 end
 
 -- Update player skill level
-RegisterNetEvent("qb-salvage:client:updateSkillLevel", function(xp, level)
+RegisterNetEvent("ss-salvagediver:client:updateSkillLevel", function(xp, level)
     playerXP = xp
     playerSkill = level
     
@@ -395,12 +395,12 @@ RegisterNetEvent("qb-salvage:client:updateSkillLevel", function(xp, level)
 end)
 
 -- Show progress when finding an item
-RegisterNetEvent("qb-salvage:client:itemFound", function(item, label)
+RegisterNetEvent("ss-salvagediver:client:itemFound", function(item, label)
     QBCore.Functions.Notify(string.format(Config.Text.item_found, label), "success")
 end)
 
 -- Complete a contract
-RegisterNetEvent("qb-salvage:client:completeContract", function()
+RegisterNetEvent("ss-salvagediver:client:completeContract", function()
     QBCore.Functions.Notify(Config.Text.contract_completed, "success")
     
     if salvageBlip then
