@@ -5,7 +5,7 @@ Config.Debug = false -- Enable/disable debug prints
 Config.UseTarget = true -- Use qb-target instead of proximity prompts
 
 -- Job settings
-Config.JobName = "salvage_diver"
+Config.JobName = "salvage"
 Config.RequiredItems = {
     tank = "diving_gear", -- Diving equipment item name
     basic_tools = "basic_salvage_tools" -- Basic tools item name
