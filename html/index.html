@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QBCore Salvage Diver UI</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div id="salvage-ui" class="container">
+        <div class="header">
+            <h1>Salvage Diver Operations</h1>
+            <span id="close-ui"><i class="fas fa-times"></i></span>
+        </div>
+        
+        <div class="main-content">
+            <!-- Status panel -->
+            <div class="status-panel">
+                <div class="status-item">
+                    <i class="fas fa-water"></i>
+                    <span>Depth: <span id="depth-value">0</span>m</span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-lungs"></i>
+                    <span>Oxygen: <span id="oxygen-value">100</span>%</span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-user-graduate"></i>
+                    <span>Level: <span id="skill-level">Novice Diver</span></span>
+                </div>
+                <div class="status-item">
+                    <i class="fas fa-star"></i>
+                    <span>XP: <span id="xp-value">0</span></span>
+                </div>
+                <div class="progress-bar-container">
+                    <div id="xp-progress" class="progress-bar"></div>
+                </div>
+            </div>
+            
+            <!-- Contract panel -->
+            <div class="contract-panel" id="contract-panel">
+                <h2>Active Contract</h2>
+                <div id="no-contract-message">
+                    <p>No active contract. Visit the Salvage Manager to get a contract.</p>
+                </div>
+                <div id="active-contract" class="hidden">
+                    <h3 id="contract-name">Contract Name</h3>
+                    <p>Location: <span id="contract-location">Unknown</span></p>
+                    <p>Status: <span id="contract-status">Not Started</span></p>
+                    <div class="rewards-list">
+                        <h4>Potential Rewards:</h4>
+                        <ul id="rewards-list">
+                            <!-- Rewards will be populated by JavaScript -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Inventory panel -->
+            <div class="inventory-panel">
+                <h2>Salvaged Items</h2>
+                <div id="salvage-inventory" class="inventory-grid">
+                    <!-- Items will be populated by JavaScript -->
+                </div>
+                <div class="inventory-actions">
+                    <button id="return-items" class="btn">Return Items</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Salvage minigame container (hidden by default) -->
+        <div id="minigame-container" class="minigame-container hidden">
+            <h2>Salvage Operation</h2>
+            <div class="minigame-grid" id="minigame-grid">
+                <!-- Grid will be populated by JavaScript -->
+            </div>
+            <div class="minigame-controls">
+                <button id="minigame-start" class="btn">Start</button>
+                <button id="minigame-cancel" class="btn btn-danger">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert popup -->
+    <div id="alert-popup" class="alert-popup hidden">
+        <div class="alert-content">
+            <h3 id="alert-title">Alert</h3>
+            <p id="alert-message">This is an alert message.</p>
+            <button id="alert-confirm" class="btn">OK</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="app.js"></script>
+</body>
+</html>
