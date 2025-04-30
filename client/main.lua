@@ -1,3 +1,4 @@
+-- client/main.lua
 local QBCore = exports['qb-core']:GetCoreObject()
 local PlayerData = QBCore.Functions.GetPlayerData()
 local isLoggedIn = LocalPlayer.state.isLoggedIn
@@ -181,25 +182,25 @@ function OpenJobMenu()
         }
     }
     
-    local menuOptions = {
-        {
-            header = "Get Contract",
-            txt = "Accept a legal salvage contract",
-            params = {
-                event = "ss-salvagediver:client:showContracts"
-            }
-        },
-        {
-            header = "Return Salvaged Items",
-            txt = "Cash in your salvaged items",
-            params = {
-                event = "ss-salvagediver:client:returnItems"
-            }
+    -- Add options to the menu
+    table.insert(headerMenu, {
+        header = "Get Contract",
+        txt = "Accept a legal salvage contract",
+        params = {
+            event = "ss-salvagediver:client:showContracts"
         }
-    }
+    })
+    
+    table.insert(headerMenu, {
+        header = "Return Salvaged Items",
+        txt = "Cash in your salvaged items",
+        params = {
+            event = "ss-salvagediver:client:returnItems"
+        }
+    })
     
     if Config.Debug then
-        table.insert(menuOptions, {
+        table.insert(headerMenu, {
             header = "🐞 Debug Info",
             txt = "XP: " .. playerXP .. " | Level: " .. playerSkill,
             params = {
@@ -208,7 +209,7 @@ function OpenJobMenu()
         })
     end
     
-    table.insert(menuOptions, {
+    table.insert(headerMenu, {
         header = "Close Menu",
         txt = "",
         params = {
@@ -216,7 +217,7 @@ function OpenJobMenu()
         }
     })
     
-    headerMenu = table.concat(headerMenu, menuOptions)
+    -- Open the menu with proper parameters
     exports['qb-menu']:openMenu(headerMenu)
 end
 
