@@ -68,43 +68,18 @@ function SetupJobCenter()
     SetEntityInvincible(jobPed, true)
     SetBlockingOfNonTemporaryEvents(jobPed, true)
     
-    -- Set up interaction
-    if Config.UseTarget then
-        exports['qb-target']:AddTargetEntity(jobPed, {
-            options = {
-                {
-                    icon = "fas fa-briefcase",
-                    label = "Talk to Salvage Manager",
-                    job = Config.JobName,
-                    action = function()
-                        OpenJobMenu()
-                    end,
-                },
-                {
-                    icon = "fas fa-briefcase",
-                    label = "Apply for Salvage Diver Job",
-                    canInteract = function()
-                        return PlayerData.job.name ~= Config.JobName
-                    end,
-                    action = function()
-                        ApplyForJob()
-                    end,
-                }
-            },
-            distance = 2.5,
-        })
-    else
-        -- Proximity prompt alternative
-        CreateThread(function()
-            while true do
-                local sleep = 1000
+    -- Set up proximity prompt interaction
+    CreateThread(function()
+        while true do
+            local sleep = 1000
+            if isLoggedIn then
                 local pos = GetEntityCoords(PlayerPedId())
                 local dist = #(pos - vector3(Config.JobCenter.coords.x, Config.JobCenter.coords.y, Config.JobCenter.coords.z))
                 
                 if dist < 5.0 then
                     sleep = 0
                     if dist < 2.0 then
-                        if PlayerData.job.name == Config.JobName then
+                        if PlayerData.job and PlayerData.job.name == Config.JobName then
                             DrawText3D(Config.JobCenter.coords.x, Config.JobCenter.coords.y, Config.JobCenter.coords.z + 1.0, "[E] Talk to Salvage Manager")
                             if IsControlJustPressed(0, 38) then -- E key
                                 OpenJobMenu()
@@ -117,10 +92,10 @@ function SetupJobCenter()
                         end
                     end
                 end
-                Wait(sleep)
             end
-        end)
-    end
+            Wait(sleep)
+        end
+    end)
 end
 
 -- Create blips for salvage areas
@@ -319,6 +294,8 @@ end
 -- Setup salvage interactions in the area
 function SetupSalvageActions(area)
     CreateThread(function()
+        local inAreaNotification = false
+        
         while activeContract and IsEntityInWater(PlayerPedId()) do
             local playerCoords = GetEntityCoords(PlayerPedId())
             local areaCoords = area.coords
@@ -326,16 +303,29 @@ function SetupSalvageActions(area)
             
             if dist < area.radius then
                 -- Display UI helper
-                DrawText3D(playerCoords.x, playerCoords.y, playerCoords.z, "[E] Start Salvaging")
+                if not activeSalvage then
+                    DrawText3D(playerCoords.x, playerCoords.y, playerCoords.z, "[E] Start Salvaging")
+                    
+                    if IsControlJustPressed(0, 38) then -- E key
+                        StartSalvage(area)
+                    end
+                end
                 
-                if IsControlJustPressed(0, 38) then -- E key
-                    StartSalvage(area)
+                if not inAreaNotification then
+                    QBCore.Functions.Notify("You're in the salvage area. Press [E] to start salvaging.", "primary")
+                    inAreaNotification = true
                 end
             else
-                break -- Player left the area
+                if inAreaNotification then
+                    QBCore.Functions.Notify("You've left the salvage area.", "error")
+                    inAreaNotification = false
+                end
+                Wait(1000) -- Wait longer when outside area
+                goto continue
             end
             
             Wait(0)
+            ::continue::
         end
     end)
 end
