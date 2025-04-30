@@ -4,6 +4,8 @@ game 'gta5'
 description 'Salvage Diver Job for QBCore'
 version '1.0.0'
 
+ui_page 'html/index.html'
+
 shared_scripts {
     '@qb-core/shared/locale.lua',
     'config.lua'
